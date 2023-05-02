@@ -1,17 +1,24 @@
-import React, { useState } from "react";
-
+import React from "react";
+import NavVar from "./components/NavVar";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Users from "./pages/Users";
+import Home from "./pages/Home";
+import Movies from "./pages/Movies";
 function App() {
-  const [condition, setCondition] = useState(false);
-  const toggle = () => {
-    setCondition(!condition);
-  };
-  const renderCondition = condition ? "True" : "False";
   return (
-    <div className="App">
-      <h1>Eunbin</h1>
-      <div>{renderCondition}</div>
-      <button onClick={toggle}>Toggle</button>
-    </div>
+    <Router>
+      <div className="App">
+        <NavVar />
+        <div className="container">
+          <Routes>
+            <Route path="/movies" element={<Movies />} />
+            <Route path="/users" element={<Users />} />
+
+            <Route path="/" element={<Home />} />
+          </Routes>
+        </div>
+      </div>
+    </Router>
   );
 }
 
