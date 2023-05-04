@@ -13,17 +13,24 @@ import Text from "../elem/Text";
 import flex from "../lib/flex";
 import Comments from "../features/comments/Comments";
 
+//Todo 항목 보여주는 페이지
 const Todo = () => {
   const dispatch = useDispatch();
+  //동적으로 변경되는 URL 매개변수를 추출
+  // //todos/:id" 경로로 접근할 수 있으므로 useParams를 사용하여 id를 추출
   const { id } = useParams();
   const navigate = useNavigate();
 
+  // 수정 모드 활성화를 위함
   const [isEditMode, setIsEditMode] = useState(false);
+  // 업데이트된 내용 저장하기 위함
   const [updatedTodo, setUpdatedTodo] = useState("");
   const todo = useSelector((state) => state.todo.todo);
 
   useEffect(() => {
+    //__getTodoThunk는 API를 통해 Todo 항목을 가져오는 작업을 수행
     dispatch(__getTodoThunk(id));
+    //clearTodo는 이전에 선택된 Todo를 지워준다
     return () => dispatch(clearTodo());
   }, [dispatch, id]);
 
@@ -36,6 +43,7 @@ const Todo = () => {
       return alert("입력된 내용이 없습니다.");
     }
     dispatch(
+      // __updateTodoThunk는 API를 통해 Todo의 내용을 업데이트하는 작업을 수행
       __updateTodoThunk({
         ...todo,
         body: updatedTodo,
@@ -84,6 +92,7 @@ const Todo = () => {
             <Text size="18">{todo?.body}</Text>
           )}
 
+          {/* 수정 버튼이 클릭되면 isEditMode를 true로 설정하고, 저장 버튼이 클릭되면 updatedTodo의 내용을 업데이트 하고 __updateTodoThunk를 dispatch한다 */}
           <StButtonGroup>
             {isEditMode ? (
               <Button size="large" onClick={onSaveButtonHandler}>
@@ -101,6 +110,7 @@ const Todo = () => {
             )}
           </StButtonGroup>
         </StBody>
+        {/* 수정모드가 아닐 때만 댓글을 달 수 있는 Comments 컴포넌트 출력 */}
         {!isEditMode && <Comments />}
       </Layout>
     </>

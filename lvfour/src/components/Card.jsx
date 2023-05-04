@@ -9,6 +9,7 @@ import Stack from "../elem/Stack";
 import Text from "../elem/Text";
 import Wrapper from "../elem/Wrapper";
 
+//개별 할 일을 나타내는 컴포넌트
 const Card = ({ todo }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ const Card = ({ todo }) => {
         <Button
           size="small"
           onClick={(event) => {
+            //이벤트 버블링을 막아 해당요소에서만 이벤트가 처리됨
             event.stopPropagation();
             const result = window.confirm("이 할일을 지울까요?");
             if (result) {

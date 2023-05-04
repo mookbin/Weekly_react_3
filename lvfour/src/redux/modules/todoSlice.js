@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { isDev, serverUrl } from ".";
+import { serverUrl } from ".";
 
+// 서버로부터 특정 todo 항목을  가져오는 함수
 export const __getTodoThunk = createAsyncThunk(
   // 첫번째 인자 : action value
   "GET_TODO",
@@ -16,6 +17,7 @@ export const __getTodoThunk = createAsyncThunk(
   }
 );
 
+// 업데이트
 export const __updateTodoThunk = createAsyncThunk(
   "UPDATE_TODO",
   async (arg, thunkAPI) => {
@@ -43,6 +45,7 @@ export const todoSlice = createSlice({
   name: "todos",
   initialState,
   reducers: {
+    // 선택된 state.todo 취소하고 초기화
     clearTodo: (state) => {
       state.todo = {
         id: 0,

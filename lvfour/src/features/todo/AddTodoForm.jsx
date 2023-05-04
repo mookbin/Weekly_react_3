@@ -6,14 +6,16 @@ import Button from "../../elem/Button";
 import Text from "../../elem/Text";
 import Wrapper from "../../elem/Wrapper";
 import Input from "../../elem/Input";
-
 import { clearTodo, __addTodoThunk } from "../../redux/modules/todosSlice";
 import flex from "../../lib/flex";
 
+// todo 목록 추가하는 폼 제공
 const AddTodoForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  // isSuccess인거 가져오기
   const isSuccess = useSelector((state) => state.todos.isSuccess);
+  //입력된 값 저장
   const [todo, setTodo] = useState({
     title: "",
     body: "",
@@ -21,9 +23,9 @@ const AddTodoForm = () => {
   });
 
   useEffect(() => {
+    // 작업 완료 후 할일 목록 페이지로 이동
     if (!isSuccess) return;
     if (isSuccess) navigate("/works");
-
     return () => dispatch(clearTodo());
   }, [dispatch, isSuccess, navigate]);
 
@@ -41,6 +43,8 @@ const AddTodoForm = () => {
         onSubmit={(envet) => {
           envet.preventDefault();
           if (
+            //trim() 문자열 양 끝의 공백문자 제거
+            //todo 객체의 세 프로퍼티 값이 모두 비어있으면 모든 항목을 입력하지 않은 것으로 여기고 경고 메세지 출력
             todo.body.trim() === "" ||
             todo.username.trim() === "" ||
             todo.title.trim() === ""

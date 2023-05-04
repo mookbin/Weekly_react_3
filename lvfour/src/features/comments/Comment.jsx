@@ -18,6 +18,7 @@ import {
   __getComment,
 } from "../../redux/modules/commentSlice";
 
+// 댓글 컴포넌트
 const Comment = ({ comment }) => {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -27,6 +28,7 @@ const Comment = ({ comment }) => {
   const { content } = useSelector((state) => state.comment.data);
   const { isGlobalEditmode } = useSelector((state) => state.comment);
 
+  //댓글 삭제
   const onDeleteButtonHandler = () => {
     const result = window.confirm("삭제하시겠습니까?");
     if (result) {
@@ -36,8 +38,11 @@ const Comment = ({ comment }) => {
     }
   };
 
+  // 댓글 업데이트
   const onUpdateButtonHandler = () => {
     dispatch(
+      // __updateComment 액션 호출
+      // 댓글의 id, 수정된 내용, 댓글을 작성한 사용자 이름, 그리고 댓글이 속한 Todo 아이디를 함께 전달
       __updateComment({
         id: comment.id,
         content: updatedComment,
@@ -45,22 +50,36 @@ const Comment = ({ comment }) => {
         todoId: id,
       })
     );
+    //댓글 수정모드 끝내기
     setIsEdit(false);
+    // 전체 수정모드 false 로 변경
     dispatch(globalEditModeToggle(false));
   };
 
+  // 댓글 수정버튼 클릭했을 때 실행되는 함수
+
   const onChangeEditButtonHandler = () => {
+    //isEdit 상태 true로 변경
     setIsEdit(true);
+    // 댓글 데이터를 가져오기 위해 __getComment 액션 디스패치
     dispatch(__getComment(comment.id));
+    //댓글 수정 버튼과 삭제 버튼이 비활성화되어 수정 중인 댓글 외에는 수정되지 않도록 방지한다.
     dispatch(globalEditModeToggle(true));
   };
 
+  // 수정 취소 버튼클릭 시 실행
   const onCancelButtonHandler = () => {
+    // 현재 상태를 수정모드에서 일반모드로 변경
     setIsEdit(false);
+
+    // commentSlice data 초기화
     dispatch(clearComment());
     dispatch(globalEditModeToggle(false));
   };
 
+  // 컴포넌트가 렌더링될 때마다 실행
+  //함수 내부에서는 content 변수가 변화할 때마다 setUpdatedComment 함수 실행
+  //렌더링될 때 최신의 값을 보여주는 역할
   useEffect(() => {
     setUpdatedComment(content);
   }, [content]);
@@ -73,7 +92,7 @@ const Comment = ({ comment }) => {
             <Input
               type="text"
               value={updatedComment}
-              maxlength={100}
+              maxLength={100}
               onChange={(event) => {
                 setUpdatedComment(event.target.value);
               }}
